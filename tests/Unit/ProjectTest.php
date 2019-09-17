@@ -136,6 +136,56 @@ class ProjectTest extends TestCase
     }
 
     /**
+     * Test updating a project
+     *
+     * @return void
+     */
+    public function testCreateProjectSettings()
+    {
+        $randomTitle = Factory::create()
+                              ->slug();
+        $project = (new ProjectService())->create(
+            $randomTitle,
+            'http://'.$randomTitle.'.com',
+            'folder',
+            true,
+            true
+        );
+
+        if ($project['status']) {
+            $randomTitle = Factory::create()
+                                  ->slug();
+            $newSetting = [
+                'url' => 'http://'.$randomTitle.'.com',
+                'folder' => __DIR__,
+                'icon' => 'heart',
+                'secureUrl' => false,
+                'status' => true
+            ];
+            $createStatus = (new ProjectService())->createSettings(
+                $project['id'],
+                $newSetting['url'],
+                $newSetting['folder'],
+                $newSetting['secureUrl'],
+                $newSetting['status']
+            );
+            $this->assertTrue($createStatus['status']);
+
+            try {
+                $projectSetting = Project::find($project['id'])->settings->where('url',
+                    $newSetting['url'])->first();
+
+                $found = $projectSetting->url == $newSetting['url'];
+            } catch (ModelNotFoundException $exception){
+                $found = false;
+            }
+            $this->assertTrue($found);
+
+        }
+        $this->assertTrue($project['status']);
+    }
+
+    /**
      * Test deleting a project
      *
      * @return void

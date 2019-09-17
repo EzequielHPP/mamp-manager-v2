@@ -218,7 +218,7 @@ class ProjectService
      *
      * @return array
      */
-    protected function createSettings(
+    public function createSettings(
         int $projectId,
         string $url,
         string $folder,
