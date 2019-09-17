@@ -81,6 +81,48 @@ class ProjectService
     }
 
     /**
+     * Deletes the project
+     *
+     * @param  int  $project_id
+     *
+     * @return array
+     */
+    public function delete(int $project_id): array
+    {
+        $output = ['status' => false];
+        if (
+            $this->validateProject($project_id)
+        ) {
+            Project::find($project_id)->delete();
+            $output['status'] = true;
+        }
+
+        return $output;
+    }
+
+    /**
+     * Deletes the project
+     *
+     * @param  int  $project_id
+     * @param  int  $project_setting_id
+     *
+     * @return array
+     */
+    public function deleteSetting(int $project_id, int $project_setting_id): array
+    {
+        $output = ['status' => false];
+        if (
+            $this->validateProject($project_id) &&
+            $this->validateProjectSetting($project_setting_id)
+        ) {
+            ProjectSetting::find($project_setting_id)->delete();
+            $output['status'] = true;
+        }
+
+        return $output;
+    }
+
+    /**
      * Prepares to update the project
      *
      * @param  int  $project_id

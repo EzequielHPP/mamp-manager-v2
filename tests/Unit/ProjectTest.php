@@ -3,9 +3,11 @@
 namespace Tests\Unit;
 
 use App\Models\Project;
+use App\Models\ProjectSetting;
 use App\Models\Settings;
 use App\Services\ProjectService;
 use Faker\Factory;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tests\TestCase;
 
 class ProjectTest extends TestCase
@@ -128,6 +130,80 @@ class ProjectTest extends TestCase
             $projectSetting = Project::find($project['id'])->settings->first();
 
             $this->assertTrue($projectSetting->url == $newUpdate['url']);
+
+        }
+        $this->assertTrue($project['status']);
+    }
+
+    /**
+     * Test deleting a project
+     *
+     * @return void
+     */
+    public function testDeleteProject()
+    {
+        $randomTitle = Factory::create()
+                              ->slug();
+        $project = (new ProjectService())->create(
+            $randomTitle,
+            'http://'.$randomTitle.'.com',
+            'folder',
+            true,
+            true
+        );
+
+        if ($project['status']) {
+            $updateStatus = (new ProjectService())->delete(
+                $project['id']
+            );
+            $this->assertTrue($updateStatus['status']);
+
+            $stillThere = true;
+            try {
+                $projectOutput = Project::where('id',$project['id'])->firstOrFail();
+            } catch (ModelNotFoundException $exception){
+                $stillThere = false;
+            }
+            $this->assertFalse($stillThere);
+
+
+        }
+        $this->assertTrue($project['status']);
+    }
+
+    /**
+     * Test deleting a project
+     *
+     * @return void
+     */
+    public function testDeleteProjectSetting()
+    {
+        $randomTitle = Factory::create()
+                              ->slug();
+        $project = (new ProjectService())->create(
+            $randomTitle,
+            'http://'.$randomTitle.'.com',
+            'folder',
+            true,
+            true
+        );
+
+        if ($project['status']) {
+            $projectSetting = Project::find($project['id'])->settings->first();
+            $updateStatus = (new ProjectService())->deleteSetting(
+                $project['id'],
+                $projectSetting->id
+            );
+            $this->assertTrue($updateStatus['status']);
+
+            $stillThere = true;
+            try {
+                $projectSetting = ProjectSetting::where('id',$projectSetting->id)->firstOrFail();
+            } catch (ModelNotFoundException $exception){
+                $stillThere = false;
+            }
+            $this->assertFalse($stillThere);
+
 
         }
         $this->assertTrue($project['status']);
