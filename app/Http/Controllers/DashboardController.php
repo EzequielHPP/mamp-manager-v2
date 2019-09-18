@@ -11,6 +11,6 @@ class DashboardController extends Controller
 
         $pageData = (new DashboardService())->handleDashboardLandingPage();
 
-        return view('dashboard',compact('pageData'));
+        return view('application',$pageData);
     }
 }

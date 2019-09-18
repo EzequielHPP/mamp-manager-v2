@@ -1,0 +1,27 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway&display=swap);* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+body {
+  background-color: #413C58;
+  font-family: "Raleway", sans-serif;
+  line-height: 1.5;
+}
+
+.main--container {
+  width: 100%;
+  max-width: 1024px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.card {
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #61988E;
+}
+

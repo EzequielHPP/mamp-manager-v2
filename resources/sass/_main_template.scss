@@ -1,0 +1,20 @@
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+body {
+  background-color: $background-color;
+  font-family: $main-font;
+  line-height: 1.5;
+}
+
+.main--container {
+  width: 100%;
+  max-width: 1024px;
+  padding: 20px;
+  box-sizing: border-box;
+}
