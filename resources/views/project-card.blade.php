@@ -9,9 +9,11 @@
                target="_blank" uk-icon="push"></a>
             <a class="uk-button uk-button-default" href="#project-settings-{{$project->id}}" uk-toggle><span
                         uk-icon="icon: cog"></span></a>
-            <a class="uk-button uk-button-danger" href="#" uk-icon="trash"></a>
+            <a class="uk-button uk-button-danger" href="#project-delete-{{$project->id}}" uk-toggle><span
+                        uk-icon="trash"></span></a>
         </div>
     </div>
 
     @include('modals.project-settings',['project'=>$project])
+    @include('modals.project-delete',['project'=>$project])
 </div>

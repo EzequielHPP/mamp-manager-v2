@@ -2,15 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ResetProjects;
 use App\Http\Requests\CreateProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
 use App\Services\DashboardService;
 use App\Services\ProjectService;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
 
+    /**
+     * Display the dasboard / homescreen
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function dashboard()
     {
 
@@ -19,6 +26,13 @@ class DashboardController extends Controller
         return view('application', $pageData);
     }
 
+    /**
+     * Create a new project
+     *
+     * @param  CreateProjectRequest  $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function createProject(CreateProjectRequest $request)
     {
         $project = (new ProjectService())->create(
@@ -32,7 +46,15 @@ class DashboardController extends Controller
         return redirect()->to(route('dashboard'));
     }
 
-    public function updateProject(UpdateProjectRequest $request, $projectId)
+    /**
+     * Update the project
+     *
+     * @param  UpdateProjectRequest  $request
+     * @param int $projectId
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateProject(UpdateProjectRequest $request, int $projectId)
     {
         $updateProject = (new ProjectService())->update($projectId, $request->toArray());
         if ($updateProject['status']) {
@@ -43,12 +65,41 @@ class DashboardController extends Controller
                 $request->toArray()
             );
 
-            if($updateProject['status']) {
+            if ($updateProject['status']) {
                 return redirect()->to(route('dashboard'));
             }
         }
 
         return back();
 
+    }
+
+    /**
+     * Delete a project
+     *
+     * @param  Request  $request
+     * @param  int  $projectId
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function deleteProject(Request $request, int $projectId)
+    {
+        $project = (new ProjectService())->delete($projectId);
+
+        return redirect()->to(route('dashboard'));
+    }
+
+    /**
+     * Reset all projects
+     *
+     * @param  Request  $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function resetProjects(Request $request)
+    {
+        event(new ResetProjects());
+
+        return redirect()->to(route('dashboard'));
     }
 }

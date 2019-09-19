@@ -3,12 +3,13 @@
 namespace App\Listeners;
 
 use App\Events\ProjectAltered;
+use App\Events\ResetProjects;
 use App\Helpers\LogHelper;
 use App\Models\Project;
 use App\Models\ProjectSetting;
 use App\Models\Settings;
 
-class UpdateVhosts
+class PopulateAllVhosts
 {
 
     /**
@@ -24,31 +25,31 @@ class UpdateVhosts
     /**
      * Handle the event.
      *
-     * @param  ProjectAltered  $event
+     * @param  ResetProjects  $event
      *
      * @return void
      */
-    public function handle(ProjectAltered $event)
+    public function handle(ResetProjects $event)
     {
         try {
-            $setting = Project::find($event->projectId)->settings;
-            $this->handleProjectsOfType($setting);
+            $this->handleProjectsOfType();
+            $this->handleProjectsOfType(true);
         } catch (\Throwable $exception) {
             LogHelper::throwError($exception);
         }
 
     }
 
-    private function handleProjectsOfType(ProjectSetting $setting): void
+    private function handleProjectsOfType(bool $https = false): void
     {
         $settings = (new Settings());
-        $projects = ProjectSetting::where('https', ($setting->https ? '1' : '0'))
+        $projects = ProjectSetting::where('https', ($https ? '1' : '0'))
                                   ->get();
 
         $location = $settings->getSetting('basic.mamp_location.apache');
         $crt_location = $settings->getSetting('basic.certificate.crt');
         $key_location = $settings->getSetting('basic.certificate.key');
-        if (!$setting->https) {
+        if (!$https) {
             $file = $settings->getSetting('basic.mamp_vhosts_file_name');
             $template = $settings->getSetting('basic.template_http');
         } else {
