@@ -13,6 +13,6 @@ class Project extends Model
 
     public function settings()
     {
-        return $this->hasMany('App\Models\ProjectSetting', 'project_id', 'id');
+        return $this->hasOne('App\Models\ProjectSetting', 'project_id', 'id');
     }
 }

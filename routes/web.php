@@ -12,3 +12,6 @@
 */
 
 Route::get('/', 'DashboardController@dashboard')->name('dashboard');
+
+Route::post('/create-project', 'DashboardController@createProject')->name('create-project');
+Route::post('/update-project', 'DashboardController@updateProject')->name('update-project');

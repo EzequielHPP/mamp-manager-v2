@@ -6,15 +6,19 @@ a {
   text-decoration: none;
 }
 
-body {
+html {
   background-color: $background-color;
+}
+
+body {
   font-family: $main-font;
   line-height: 1.5;
 }
 
 .main--container {
   width: 100%;
-  max-width: 1024px;
+  max-width: 1320px;
+  margin: 0 auto;
   padding: 20px;
   box-sizing: border-box;
 }

@@ -67,5 +67,9 @@ SSLSessionCacheTimeout  300
 #   SSL engine uses internally for inter-process synchronization.
 SSLMutex  "file:/Applications/MAMP/Library/logs/ssl_mutex"
 
+##
+## SSL Virtual Host Context
+##
+
 #START WEBSITES HERE
 @yield('projects')

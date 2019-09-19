@@ -11,9 +11,12 @@ use App\Models\Project;
 use App\Models\ProjectSetting;
 use App\Models\Settings;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Validator;
 
 class ProjectService
 {
+
+    protected $errors = [];
 
     /**
      * Preparation for the create project handler
@@ -52,8 +55,14 @@ class ProjectService
                     $output['status'] = true;
                     $output['id'] = $project['id'];
                     event(new ProjectAltered($project['id']));
+                } else {
+                    $output['message'] = $projectSettings['message'];
                 }
+            } else {
+                $output['message'] = 'Couldn\'t create main project row';
             }
+        } else {
+            $output['message'] = 'Invalid project values';
         }
 
         return $output;
@@ -227,7 +236,8 @@ class ProjectService
         string $asset = null
     ): array {
         $output = [
-            'status' => false
+            'status' => false,
+            'message' => ''
         ];
 
         try {
@@ -246,6 +256,7 @@ class ProjectService
 
         } catch (\Throwable $exception) {
             LogHelper::throwError($exception);
+            $output['message'] = $exception->getMessage();
         }
 
         return $output;
@@ -298,12 +309,23 @@ class ProjectService
         string $folder
     ): bool {
         $valid = true;
+        $v = Validator::make([],[]);
 
-        if (empty($title) || empty($url) || empty($folder)) {
+        if (empty($title)){
+            $v->getMessageBag()->add('title', 'Empty title');
+            $valid = false;
+        }
+        if(empty($url)){
+            $v->getMessageBag()->add('url', 'Empty url');
+            $valid = false;
+        }
+        if(empty($folder)) {
+            $v->getMessageBag()->add('folder', 'Empty folder');
             $valid = false;
         }
 
         if (!UrlHelper::validate($url)) {
+            $v->getMessageBag()->add('url', 'Invalid url');
             $valid = false;
         }
 
