@@ -83,7 +83,14 @@ class ProjectService
             $this->validateProject($project_id) &&
             $this->validateUpdateKeys($newData)
         ) {
-            $output = $this->updateProject($project_id, $newData['title'], $newData['active']);
+            $output = $this->updateProject($project_id, $newData['title'], $newData['status']);
+        } else {
+            if (!$this->validateProject($project_id)) {
+                $output['message'] = 'Not a valid project '.$project_id;
+            }
+            if (!$this->validateUpdateKeys($newData)) {
+                $output['message'] = 'No valid data';
+            }
         }
 
         return $output;
@@ -100,9 +107,10 @@ class ProjectService
     {
         $output = ['status' => false];
         if (
-            $this->validateProject($project_id)
+        $this->validateProject($project_id)
         ) {
-            Project::find($project_id)->delete();
+            Project::find($project_id)
+                   ->delete();
             $output['status'] = true;
         }
 
@@ -124,7 +132,8 @@ class ProjectService
             $this->validateProject($project_id) &&
             $this->validateProjectSetting($project_setting_id)
         ) {
-            ProjectSetting::find($project_setting_id)->delete();
+            ProjectSetting::find($project_setting_id)
+                          ->delete();
             $output['status'] = true;
         }
 
@@ -149,6 +158,16 @@ class ProjectService
             $this->validateUpdateSettingKeys($newData)
         ) {
             $output = $this->updateProjectSettings($project_setting_id, $newData);
+        } else {
+            if (!$this->validateProject($project_id)) {
+                $output['message'] = 'Not a valid project '.$project_id;
+            }
+            if (!$this->validateProjectSetting($project_setting_id)) {
+                $output['message'] = 'Not a valid setting';
+            }
+            if (!$this->validateUpdateSettingKeys($newData)) {
+                $output['message'] = 'No valid data';
+            }
         }
 
         return $output;
@@ -198,6 +217,7 @@ class ProjectService
         $output = [
             'status' => false
         ];
+        $v = Validator::make([], []);
 
         try {
             $project = Project::find($projectId);
@@ -210,6 +230,8 @@ class ProjectService
 
         } catch (\Throwable $exception) {
             LogHelper::throwError($exception);
+            $v->getMessageBag()
+              ->add('updateProject', $exception->getMessage());
         }
 
         return $output;
@@ -244,7 +266,7 @@ class ProjectService
             $setting = new ProjectSetting();
             $setting->project_id = $projectId;
             $setting->url = $url;
-            $setting->https = $secureUrl;
+            $setting->https = $secureUrl == 'true' ? true : false;;
             $setting->directory = $folder;
             $setting->icon = (new Settings())->getSetting('basic.settings_default_icon');
             $setting->status = $status;
@@ -275,13 +297,17 @@ class ProjectService
         $output = [
             'status' => false
         ];
+        $v = Validator::make([], []);
+
         try {
             $projectSetting = ProjectSetting::find($projectSettingId);
             $projectSetting->url = $data['url'];
-            $projectSetting->https = $data['secureUrl'];
+            $projectSetting->https = $data['secureUrl'] == 'true' ? true : false;
             $projectSetting->directory = $data['folder'];
-            $projectSetting->icon = $data['icon'];
-            $projectSetting->status = $data['status'];
+            if (array_key_exists('icon', $data)) {
+                $projectSetting->icon = $data['icon'];
+            }
+            $projectSetting->status = $data['status'] == 'true' ? true : false;
             $projectSetting->save();
 
             $output['id'] = $projectSetting->id;
@@ -289,6 +315,8 @@ class ProjectService
 
         } catch (\Throwable $exception) {
             LogHelper::throwError($exception);
+            $v->getMessageBag()
+              ->add('updateProject', $exception->getMessage());
         }
 
         return $output;
@@ -309,23 +337,27 @@ class ProjectService
         string $folder
     ): bool {
         $valid = true;
-        $v = Validator::make([],[]);
+        $v = Validator::make([], []);
 
-        if (empty($title)){
-            $v->getMessageBag()->add('title', 'Empty title');
+        if (empty($title)) {
+            $v->getMessageBag()
+              ->add('title', 'Empty title');
             $valid = false;
         }
-        if(empty($url)){
-            $v->getMessageBag()->add('url', 'Empty url');
+        if (empty($url)) {
+            $v->getMessageBag()
+              ->add('url', 'Empty url');
             $valid = false;
         }
-        if(empty($folder)) {
-            $v->getMessageBag()->add('folder', 'Empty folder');
+        if (empty($folder)) {
+            $v->getMessageBag()
+              ->add('folder', 'Empty folder');
             $valid = false;
         }
 
         if (!UrlHelper::validate($url)) {
-            $v->getMessageBag()->add('url', 'Invalid url');
+            $v->getMessageBag()
+              ->add('url', 'Invalid url');
             $valid = false;
         }
 
@@ -345,7 +377,7 @@ class ProjectService
         if (!array_key_exists('title', $array)) {
             $return = false;
         }
-        if (!array_key_exists('active', $array)) {
+        if (!array_key_exists('status', $array)) {
             $return = false;
         }
 
@@ -370,9 +402,6 @@ class ProjectService
             $return = false;
         }
         if (!array_key_exists('secureUrl', $array)) {
-            $return = false;
-        }
-        if (!array_key_exists('icon', $array)) {
             $return = false;
         }
 

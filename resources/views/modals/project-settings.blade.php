@@ -2,7 +2,7 @@
     <div class="uk-modal-dialog uk-modal-body">
         <h2 class="uk-modal-title">{{$project->title}}</h2>
 
-        <form action="{{route('update-project')}}" method="post" enctype="multipart/form-data">
+        <form action="{{route('update-project',['id' => $project->id])}}" method="post" enctype="multipart/form-data">
             @csrf
             <fieldset class="uk-fieldset uk-grid-small" uk-grid>
 
@@ -32,8 +32,8 @@
                 <div class="uk-width-1-2@s uk-display-inline">
                     <div class="uk-form-label">Is the project active?</div>
                     <div class="uk-form-controls">
-                        <label><input class="uk-radio" type="radio" name="active" value="true" @if($project->active){{'checked'}}@endif > Yes</label><br>
-                        <label><input class="uk-radio" type="radio" name="active" value="false" @if(!$project->active){{'checked'}}@endif > No</label>
+                        <label><input class="uk-radio" type="radio" name="status" value="true" @if($project->active){{'checked'}}@endif > Yes</label><br>
+                        <label><input class="uk-radio" type="radio" name="status" value="false" @if(!$project->active){{'checked'}}@endif > No</label>
                     </div>
                 </div>
 
