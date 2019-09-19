@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Events\ProjectAltered;
 use App\Events\ResetProjects;
+use App\Listeners\AddProjectsToHosts;
 use App\Listeners\PopulateAllVhosts;
 use App\Listeners\UpdateVhosts;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -19,9 +20,11 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         ProjectAltered::class => [
             UpdateVhosts::class,
+            AddProjectsToHosts::class,
         ],
         ResetProjects::class => [
             PopulateAllVhosts::class,
+            AddProjectsToHosts::class,
         ],
     ];
 
