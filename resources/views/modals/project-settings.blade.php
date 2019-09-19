@@ -32,16 +32,16 @@
                 <div class="uk-width-1-2@s uk-display-inline">
                     <div class="uk-form-label">Is the project active?</div>
                     <div class="uk-form-controls">
-                        <label><input class="uk-radio" type="radio" name="status" value="true" @if($project->active){{'checked'}}@endif > Yes</label><br>
-                        <label><input class="uk-radio" type="radio" name="status" value="false" @if(!$project->active){{'checked'}}@endif > No</label>
+                        <label><input class="uk-radio" type="radio" name="status" value="true" @if($project->status){{'checked'}}@endif > Yes</label><br>
+                        <label><input class="uk-radio" type="radio" name="status" value="false" @if(!$project->status){{'checked'}}@endif > No</label>
                     </div>
                 </div>
 
                 <div class="uk-width-1-2@s uk-display-inline">
                     <div class="uk-form-label">Should the project be on https?</div>
                     <div class="uk-form-controls">
-                        <label><input class="uk-radio" type="radio" name="secureUrl" value="true" @if($project->secureUrl){{'checked'}}@endif > Yes</label><br>
-                        <label><input class="uk-radio" type="radio" name="secureUrl" value="false" @if(!$project->secureUrl){{'checked'}}@endif > No</label>
+                        <label><input class="uk-radio" type="radio" name="secureUrl" value="true" @if($project->settings->https){{'checked'}}@endif > Yes</label><br>
+                        <label><input class="uk-radio" type="radio" name="secureUrl" value="false" @if(!$project->settings->https){{'checked'}}@endif > No</label>
                     </div>
                 </div>
 
