@@ -7,24 +7,24 @@
             <fieldset class="uk-fieldset uk-grid-small" uk-grid>
 
                 <div class=" uk-width-1-1">
-                    <label class="uk-form-label" for="create-title">Title</label>
+                    <label class="uk-form-label" for="update-title">Title</label>
                     <div class="uk-form-controls">
-                        <input class="uk-input" id="create-title" name="title" type="text" placeholder="Project title" value="{{$project->title}}" required>
+                        <input class="uk-input" id="update-title" name="title" type="text" placeholder="Project title" value="{{$project->title}}" required>
                     </div>
                 </div>
 
                 <div class="uk-width-1-1">
-                    <label class="uk-form-label" for="create-url">Url</label>
+                    <label class="uk-form-label" for="update-url">Url</label>
                     <div class="uk-form-controls">
-                        <input class="uk-input" id="create-url" name="url" type="text"
+                        <input class="uk-input" id="update-url" name="url" type="text"
                                placeholder="something.local.com" required value="{{$project->settings->url}}">
                     </div>
                 </div>
 
                 <div class="uk-width-1-1">
-                    <label class="uk-form-label" for="create-folder">Project Folder</label>
+                    <label class="uk-form-label" for="update-folder">Project Folder</label>
                     <div class="uk-form-controls">
-                        <input class="uk-input" id="create-folder" name="folder" type="text"
+                        <input class="uk-input" id="update-folder" name="folder" type="text"
                                placeholder="/var/www/project/public" required value="{{$project->settings->directory}}">
                     </div>
                 </div>
@@ -42,6 +42,14 @@
                     <div class="uk-form-controls">
                         <label><input class="uk-radio" type="radio" name="secureUrl" value="true" @if($project->settings->https){{'checked'}}@endif > Yes</label><br>
                         <label><input class="uk-radio" type="radio" name="secureUrl" value="false" @if(!$project->settings->https){{'checked'}}@endif > No</label>
+                    </div>
+                </div>
+
+                <div class="uk-width-1-1">
+                    <label class="uk-form-label" for="update-asset">Asset</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-input" id="update-asset" name="asset" type="text"
+                               placeholder="Image url (https://.../image.jpg" value="{{$project->asset->preview ?? ''}}">
                     </div>
                 </div>
 

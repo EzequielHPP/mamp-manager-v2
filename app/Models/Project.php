@@ -15,4 +15,9 @@ class Project extends Model
     {
         return $this->hasOne('App\Models\ProjectSetting', 'project_id', 'id');
     }
+
+    public function asset()
+    {
+        return $this->hasOne('App\Models\ProjectAsset', 'project_id', 'id');
+    }
 }

@@ -9,7 +9,8 @@
                 <div class=" uk-width-1-1">
                     <label class="uk-form-label" for="create-title">Title</label>
                     <div class="uk-form-controls">
-                        <input class="uk-input" id="create-title" name="title" type="text" placeholder="Project title" required>
+                        <input class="uk-input" id="create-title" name="title" type="text" placeholder="Project title"
+                               required>
                     </div>
                 </div>
 
@@ -42,6 +43,14 @@
                     <div class="uk-form-controls">
                         <label><input class="uk-radio" type="radio" name="secureUrl" value="true"> Yes</label><br>
                         <label><input class="uk-radio" type="radio" name="secureUrl" value="false" checked> No</label>
+                    </div>
+                </div>
+
+                <div class="uk-width-1-1">
+                    <label class="uk-form-label" for="create-asset">Asset</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-input" id="create-asset" name="asset" type="text"
+                               placeholder="Image url (https://.../image.jpg">
                     </div>
                 </div>
 

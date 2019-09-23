@@ -8,6 +8,7 @@ use App\Events\ProjectAltered;
 use App\Helpers\LogHelper;
 use App\Helpers\UrlHelper;
 use App\Models\Project;
+use App\Models\ProjectAsset;
 use App\Models\ProjectSetting;
 use App\Models\Settings;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -277,6 +278,13 @@ class ProjectService
             $output['status'] = true;
             $output['id'] = $setting->id;
 
+            if (!is_null($asset)) {
+                $assetCreated = $this->handleAssetForProject($projectId, $asset);
+                if (!$assetCreated['status']) {
+                    $output['status'] = false;
+                }
+            }
+
         } catch (\Throwable $exception) {
             LogHelper::throwError($exception);
             $output['message'] = $exception->getMessage();
@@ -314,10 +322,137 @@ class ProjectService
             $output['id'] = $projectSetting->id;
             $output['status'] = true;
 
+            if (array_key_exists('asset', $data) && !is_null($data['asset'])) {
+                $assetCreated = $this->handleAssetForProject($projectSetting->project_id, $data['asset']);
+                if (!$assetCreated['status']) {
+                    $output['status'] = false;
+                }
+            } else {
+                $assetDeleted = $this->deleteAssetFromProject($projectSetting->project_id);
+            }
+
         } catch (\Throwable $exception) {
             LogHelper::throwError($exception);
             $v->getMessageBag()
               ->add('updateProject', $exception->getMessage());
+        }
+
+        return $output;
+    }
+
+    /**
+     * Attach an asset to a project
+     *
+     * @param  int  $projectId
+     * @param  string  $asset
+     *
+     * @return array
+     */
+    protected function handleAssetForProject(int $projectId, string $asset): array
+    {
+        $output = [
+            'status' => false
+        ];
+        $v = Validator::make([], []);
+
+        try {
+            $foundAsset = ProjectAsset::where('project_id', $projectId)
+                                      ->firstOrFail();
+            $output = $this->updateAsset($foundAsset->id, $asset);
+        } catch (ModelNotFoundException $exception) {
+            $output = $this->createAsset($projectId, $asset);
+        }
+
+        return $output;
+    }
+
+    /**
+     * Attach an asset to a project
+     *
+     * @param  int  $projectId
+     * @param  string  $asset
+     *
+     * @return array
+     */
+    protected function createAsset(int $projectId, string $asset): array
+    {
+        $output = [
+            'status' => false
+        ];
+        $v = Validator::make([], []);
+
+        try {
+            $newAsset = new ProjectAsset();
+            $newAsset->project_id = $projectId;
+            $newAsset->preview = $asset;
+            $newAsset->save();
+
+            $output['id'] = $newAsset->id;
+            $output['status'] = true;
+
+        } catch (\Throwable $exception) {
+            LogHelper::throwError($exception);
+            $v->getMessageBag()
+              ->add('createAsset', $exception->getMessage());
+        }
+
+        return $output;
+    }
+
+    /**
+     * Remove an asset from a project
+     *
+     * @param  int  $projectId
+     * @param  string  $asset
+     *
+     * @return array
+     */
+    protected function deleteAssetFromProject(int $projectId): array
+    {
+        $output = [
+            'status' => false
+        ];
+        $v = Validator::make([], []);
+
+        try {
+            $asset = ProjectAsset::where('project_id',$projectId)->firstOrFail();
+            $asset->delete();
+
+            $output['status'] = true;
+
+        } catch (ModelNotFoundException $exception) {
+            // Do nothing
+        }
+
+        return $output;
+    }
+
+    /**
+     * Update asset url
+     *
+     * @param  int  $assetId
+     * @param  string  $asset
+     *
+     * @return array
+     */
+    protected function updateAsset(int $assetId, string $asset): array
+    {
+        $output = [
+            'status' => false
+        ];
+        $v = Validator::make([], []);
+
+        try {
+            $assetUpdate = ProjectAsset::find($assetId);
+            $assetUpdate->preview = $asset;
+            $assetUpdate->save();
+
+            $output['status'] = true;
+
+        } catch (\Throwable $exception) {
+            LogHelper::throwError($exception);
+            $v->getMessageBag()
+              ->add('updateAsset', $exception->getMessage());
         }
 
         return $output;

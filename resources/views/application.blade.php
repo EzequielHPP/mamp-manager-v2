@@ -40,7 +40,7 @@
                     </ul>
                 </div>
             </div>
-            <a class="uk-navbar-item uk-logo" href="#"><img src="/img/logo.png" width="200"></a>
+            <a class="uk-navbar-item uk-logo" href="/"><img src="/img/logo.png" width="200"></a>
             <div class="uk-navbar-center-right">
                 <div>
                     <ul class="uk-navbar-nav">
@@ -76,8 +76,12 @@
     @include('modals.create-project')
 </div>
 <!-- UIkit JS -->
+<script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.0/js/uikit.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.2.0/js/uikit-icons.min.js"></script>
-<script src="/app/js/app.js"></script>
+<script src="/js/app.js"></script>
 </body>
 </html>

@@ -29,3 +29,73 @@ body {
   background-color: #61988E;
 }
 
+.project-image-square {
+  width: 250px;
+  height: 250px;
+  cursor: pointer;
+}
+
+.project-image-square .uk-card-body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+}
+
+.project-image-square span {
+  opacity: 0;
+  transition: opacity 0.25s ease-in-out;
+  color: #61988E;
+}
+
+.project-image-square .uk-position-top-left,
+.project-image-square .uk-position-top-right,
+.project-image-square .uk-position-bottom-right,
+.project-image-square .uk-position-bottom-left {
+  border: 0;
+  width: 50px;
+  height: 50px;
+  opacity: 0;
+  transition: opacity 0.25s ease-in-out;
+}
+
+.project-image-square .uk-position-top-left {
+  top: 20px;
+  left: 20px;
+  border-top: 3px solid #61988E;
+  border-left: 3px solid #61988E;
+}
+
+.project-image-square .uk-position-top-right {
+  top: 20px;
+  right: 20px;
+  border-top: 3px solid #61988E;
+  border-right: 3px solid #61988E;
+}
+
+.project-image-square .uk-position-bottom-left {
+  bottom: 20px;
+  left: 20px;
+  border-bottom: 3px solid #61988E;
+  border-left: 3px solid #61988E;
+}
+
+.project-image-square .uk-position-bottom-right {
+  bottom: 20px;
+  right: 20px;
+  border-bottom: 3px solid #61988E;
+  border-right: 3px solid #61988E;
+}
+
+.project-image-square:hover .uk-position-top-left,
+.project-image-square:hover .uk-position-top-right,
+.project-image-square:hover .uk-position-bottom-right,
+.project-image-square:hover .uk-position-bottom-left,
+.project-image-square:hover span,
+.project-image-square.selected .uk-position-top-left,
+.project-image-square.selected .uk-position-top-right,
+.project-image-square.selected .uk-position-bottom-right,
+.project-image-square.selected .uk-position-bottom-left,
+.project-image-square.selected span {
+  opacity: 1;
+}
+

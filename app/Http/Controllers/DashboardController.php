@@ -40,7 +40,8 @@ class DashboardController extends Controller
             $request->url,
             $request->folder,
             $request->active == 'true' ? true : false,
-            $request->secureUrl == 'true' ? true : false
+            $request->secureUrl == 'true' ? true : false,
+            $request->asset ?? null
         );
 
         return redirect()->to(route('dashboard'));
