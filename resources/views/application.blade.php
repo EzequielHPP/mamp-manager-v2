@@ -44,7 +44,7 @@
             <div class="uk-navbar-center-right">
                 <div>
                     <ul class="uk-navbar-nav">
-                        <li><a href="{{route('reset')}}">Reset</a></li>
+                        <li class="uk-active"><a href="{{route('reset')}}">Reset</a></li>
                     </ul>
                 </div>
             </div>
