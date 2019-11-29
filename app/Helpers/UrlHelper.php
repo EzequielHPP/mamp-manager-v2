@@ -28,6 +28,13 @@ class UrlHelper
         $url = str_replace('http://', '', $url);
         $url = Str::snake($url);
 
-        return  $url;
+        return $url;
+    }
+
+    public static function isSecure()
+    {
+        return
+            (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            || $_SERVER['SERVER_PORT'] == 443;
     }
 }

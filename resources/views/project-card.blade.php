@@ -1,4 +1,4 @@
-@if($project->settings->url !== env('APP_URL'))
+@if((UrlHelper::isSecure() ? 'https://' : 'http://').$project->settings->url !== env('APP_URL'))
     @php($image = 'https://picsum.photos/200/200?grayscale?random='.$index)
     @if(!is_null($project->asset->preview ?? null))
         @php($image = $project->asset->preview)
@@ -6,7 +6,9 @@
     <div>
         <div class="uk-card uk-card-default uk-card-body uk-box-shadow-small uk-box-shadow-hover-large uk-padding">
             <img src="{{$image}}" class="uk-border-circle" width="200" height="200">
-            <h3 class="uk-card-title">{{$project->title}}</h3>
+            <h3 class="uk-card-title">@if($project->settings->https)
+                    <span class="uk-badge"><span uk-icon="lock"></span></span>
+                @endif{{$project->title}}</h3>
             <hr class="uk-divider-icon">
             <div>
                 <a class="uk-button uk-button-default"

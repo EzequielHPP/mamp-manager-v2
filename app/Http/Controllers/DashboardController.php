@@ -59,16 +59,7 @@ class DashboardController extends Controller
     {
         $updateProject = (new ProjectService())->update($projectId, $request->toArray());
         if ($updateProject['status']) {
-            $project_setting_id = Project::find($projectId)->settings->id;
-            $updateProject = (new ProjectService())->updateSettings(
-                $projectId,
-                $project_setting_id,
-                $request->toArray()
-            );
-
-            if ($updateProject['status']) {
-                return redirect()->to(route('dashboard'));
-            }
+            return redirect()->to(route('dashboard'));
         }
 
         return back();

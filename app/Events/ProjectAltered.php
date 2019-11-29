@@ -15,15 +15,17 @@ class ProjectAltered
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $projectId;
+    public $settings;
 
     /**
      * Create a new event instance.
      *
      * @param  int  $projectId
      */
-    public function __construct(int $projectId)
+    public function __construct(int $projectId, array $settings)
     {
         $this->projectId = $projectId;
+        $this->settings = $settings;
     }
 
     /**

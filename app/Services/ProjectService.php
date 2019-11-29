@@ -85,7 +85,7 @@ class ProjectService
             $this->validateUpdateKeys($newData)
         ) {
             $output = $this->updateProject($project_id, $newData['title'], $newData['status']);
-            event(new ProjectAltered($project_id));
+            event(new ProjectAltered($project_id, $newData));
         } else {
             if (!$this->validateProject($project_id)) {
                 $output['message'] = 'Not a valid project '.$project_id;
