@@ -55,7 +55,7 @@ class ProjectService
                 if ($projectSettings['status']) {
                     $output['status'] = true;
                     $output['id'] = $project['id'];
-                    event(new ProjectAltered($project['id']));
+                    event(new ProjectAltered($project['id'],$projectSettings));
                 } else {
                     $output['message'] = $projectSettings['message'];
                 }
