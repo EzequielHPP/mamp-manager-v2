@@ -2,7 +2,7 @@
 
 @section('projects')
     @foreach($projects as $project)
-        <VirtualHost {{$project->url}}:443>
+        <VirtualHost *:443>
             DocumentRoot "{{$project->directory}}"
             ServerName {{$project->url}}
             ErrorLog "/Applications/MAMP/logs/{{UrlHelper::logFriendly($project->url)}}-error_log"

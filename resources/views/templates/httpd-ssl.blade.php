@@ -35,6 +35,8 @@
 #       Listen directives: "Listen [::]:443" and "Listen 0.0.0.0:443"
 #
 Listen 443
+NameVirtualHost *:443
+SSLStrictSNIVHostCheck off
 
 ##
 ##  SSL Global Context
